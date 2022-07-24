@@ -16,3 +16,19 @@ yarn hardhat compile
 * Publish the project in Github
 * Run the scripts with a few set of proposals, play around with token balances, cast and delegate votes, create ballots from snapshots, interact with the ballots and inspect results
 * Write a report detailing the addresses, transaction hashes, description of the operation script being executed and console output from script execution for each step
+
+## Commands:
+
+### Deploy contracts:
+
+This script will first deploy a token contract, mint some tokens, and then use that contract as input to deploying the ballot contract. Substitute the [] with proposal names!
+<pre><code>yarn run ts-node --files ./scripts/deploy.ts [No1] [No2] [No3]
+</code></pre>
+
+### Mint tokens:
+
+### Vote:
+
+### Delegate:
+
+### Determine winner:
