@@ -14,7 +14,7 @@ async function main() {
     if (process.argv.length < 3) throw new Error("No wallet to mint tokens specified.");
     let addressToMint = process.argv[3];
 
-    if (process.argv.length < 4) throw new Error("No tokens to mint specified.");
+    if (process.argv.length < 4) throw new Error("No number of tokens to mint specified.");
     let tokensToMint = process.argv[4];
 
     const provider = new ethers.providers.AlchemyProvider('rinkeby', process.env.API_KEY);
