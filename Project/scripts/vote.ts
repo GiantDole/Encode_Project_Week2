@@ -15,7 +15,7 @@ async function main() {
     let proposalIndex = process.argv[3];
 
     if (process.argv.length < 4) throw new Error("No vote amount specified.");
-    let voteAmount = process.argv[4];
+    let voteAmount = ethers.BigNumber.from(process.argv[4]);
 
     const provider = new ethers.providers.AlchemyProvider('rinkeby', process.env.API_KEY);
     const wallet = new ethers.Wallet(process.env.PRIVATE_KEY ?? EXPOSED_KEY);
@@ -33,6 +33,9 @@ async function main() {
         ballotJson.abi,
         signer
     ) as CustomBallot;
+
+    const votingPower = await ballotContract.votingPower();
+    if (votingPower < voteAmount) throw new Error(`You only have ${votingPower} votes left while specifying ${voteAmount} votes!`)
 
     
     const proposal = await ballotContract.proposals(proposalIndex);        
