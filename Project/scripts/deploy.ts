@@ -50,20 +50,22 @@ async function main() {
     });
 
 
-    console.log("Deploying Token contract");
-    const tokenFactory = new ethers.ContractFactory(
-        tokenJson.abi,
-        tokenJson.bytecode,
-        signer
-    );
-    const tokenContract = await tokenFactory.deploy();
-    await tokenContract.deployed();
-    console.log("Success: Deployed token contract");
-    console.log(`Token contract deployed at ${tokenContract.address}`);
-    console.log("Minting some tokens...");
-    const mintTx = await tokenContract.mint(wallet.address, 100);
-    await mintTx.wait();
-    console.log("Successfully minted 100 tokens");
+    // No need to reploy token once already deployed
+
+    // console.log("Deploying Token contract");
+    // const tokenFactory = new ethers.ContractFactory(
+    //     tokenJson.abi,
+    //     tokenJson.bytecode,
+    //     signer
+    // );
+    // const tokenContract = await tokenFactory.deploy();
+    // await tokenContract.deployed();
+    // console.log("Success: Deployed token contract");
+    // console.log(`Token contract deployed at ${tokenContract.address}`);
+    // console.log("Minting some tokens...");
+    // const mintTx = await tokenContract.mint(wallet.address, 100);
+    // await mintTx.wait();
+    // console.log("Successfully minted 100 tokens");
 
     console.log("Deploying Ballot contract");
     const ballotFactory = new ethers.ContractFactory(
@@ -73,7 +75,7 @@ async function main() {
     );
     const ballotContract = await ballotFactory.deploy(
         convertStringArrayToBytes32(proposals),
-        tokenContract.address
+        "0xCC3Be7FD561127ECD540A69572ba33Bcb6392760" // Token adress
     );
     console.log("Awaiting confirmations");
     await ballotContract.deployed();
