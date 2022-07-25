@@ -10,8 +10,8 @@ yarn hardhat compile
 ### Instructions:
 * Structure scripts to
   * Deploy everything :white_check_mark:
-  * Interact with the ballot factory
-  * Query proposals for each ballot
+  * Interact with the ballot factory :white_check_mark:
+  * Query proposals for each ballot :white_check_mark:
   * Operate scripts
 * Publish the project in Github
 * Run the scripts with a few set of proposals, play around with token balances, cast and delegate votes, create ballots from snapshots, interact with the ballots and inspect results
