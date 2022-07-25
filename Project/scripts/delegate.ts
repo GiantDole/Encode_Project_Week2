@@ -34,7 +34,7 @@ async function main() {
     const preMintVotePower = await tokenContract.getVotes(
         walletDelegatee
       );    
-    console.log(`Vote power before delegate: ${preMintVotePower}`);
+    console.log(`Vote power before delegate: ${Number(ethers.utils.formatEther(preMintVotePower))}`);
     const delegateTx = await tokenContract.delegate(walletDelegatee);   
     console.log("Awaiting confirmation..."); 
     await delegateTx.wait();
@@ -42,7 +42,7 @@ async function main() {
     const postMintVotePower = await tokenContract.getVotes(
         walletDelegatee
       );
-    console.log(`Vote power after delegate: ${postMintVotePower}`);
+    console.log(`Vote power after delegate: ${Number(ethers.utils.formatEther(postMintVotePower))}`);
     console.log(`Transaction Hash: ${delegateTx.hash}`);
 }
 

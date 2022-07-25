@@ -36,7 +36,7 @@ async function main() {
     ) as MyToken;
 
 
-    const mintTx = await tokenContract.mint(addressToMint, tokensToMint);   
+    const mintTx = await tokenContract.mint(addressToMint, ethers.utils.parseEther(Number(tokensToMint).toFixed(18)));   
     console.log("Awaiting confirmation..."); 
     await mintTx.wait();
     console.log(`Successfully minted ${tokensToMint} tokens to ${addressToMint}`);
