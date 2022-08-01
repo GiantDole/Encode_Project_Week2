@@ -1,9 +1,15 @@
 import { ethers } from "ethers";
 import "dotenv/config";
+import * as readline from "readline";
 import * as ballotJson from "../artifacts/contracts/CustomBallot.sol/CustomBallot.json";
+
+let tokenAddress;
+let signer: ethers.Signer | undefined;
+let proposals: string[];
 
 const EXPOSED_KEY =
     "8da4ef21b864d2cc526dbdb2a120bd2874c36c9d0a1fb7f8c63d7f7a8b41de8f";
+
 
 function convertStringArrayToBytes32(array: string[]) {
     const bytes32Array = [];
@@ -34,7 +40,7 @@ async function main() {
     const wallet = new ethers.Wallet(process.env.PRIVATE_KEY ?? EXPOSED_KEY);
     console.log(`Using address ${wallet.address}`);
     const provider = setupProvider();
-    const signer = wallet.connect(provider);
+    signer = wallet.connect(provider);
     const balanceBN = await signer.getBalance();
     const balance = Number(ethers.utils.formatEther(balanceBN));
     console.log(`Wallet balance ${balance}`);
@@ -42,27 +48,43 @@ async function main() {
         throw new Error("Not enough ether");
     }
 
-    const proposals = process.argv.slice(2);
+    proposals = process.argv.slice(2);
     if (proposals.length < 2) throw new Error("Not enough proposals provided");
     proposals.forEach((element, index) => {
         console.log(`Proposal N. ${index + 1}: ${element}`);
     });
-
-    console.log("Deploying Ballot contract");
-    const ballotFactory = new ethers.ContractFactory(
-        ballotJson.abi,
-        ballotJson.bytecode,
-        signer
-    );
-    const ballotContract = await ballotFactory.deploy(
-        convertStringArrayToBytes32(proposals),
-        "0xCC3Be7FD561127ECD540A69572ba33Bcb6392760" // Token adress
-    );
-    console.log("Awaiting confirmations");
-    await ballotContract.deployed();
-    console.log("Completed");
-    console.log(`Ballot contract deployed at ${ballotContract.address}`);
+    
+    const rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+      });
+    addressMenu(rl);
 }
+
+async function addressMenu(rl: readline.Interface) {
+    addressRequest(rl);
+}  
+
+function addressRequest(rl: readline.Interface) {    
+        rl.question("What is the token adress? ",  async (tokenAddress: string) => {
+        console.log(`the token Address: ${tokenAddress}\n`);
+        rl.close();
+        console.log("Deploying Ballot contract");
+        const ballotFactory = new ethers.ContractFactory(
+            ballotJson.abi,
+            ballotJson.bytecode,
+            signer
+        );
+        const ballotContract = await ballotFactory.deploy(
+            convertStringArrayToBytes32(proposals),
+            tokenAddress // Token adress
+        );
+        console.log("Awaiting confirmations");
+        await ballotContract.deployed();
+        console.log("Completed");
+        console.log(`Ballot contract deployed at ${ballotContract.address}`);
+    });
+}  
 
 main().catch((error) => {
     console.error(error);
